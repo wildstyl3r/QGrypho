@@ -1,0 +1,3 @@
+[submodule "grypho"]
+	path = grypho
+	url = ../grypho/
