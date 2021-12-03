@@ -1,18 +1,17 @@
-add_library(QGrypho QGrypho.cpp QGrypho.ui)
+add_library(QGrypho ../include/QGrypho.hpp QGrypho.cpp QGVertex.cpp QGrypho.ui)
 target_include_directories(
   QGrypho
   PUBLIC
     $<BUILD_INTERFACE:${QGrypho_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${QGrypho_SOURCE_DIR}/grypho/include>
+    $<BUILD_INTERFACE:${QGrypho_SOURCE_DIR}/nodesoup/include>
   PRIVATE
     $<BUILD_INTERFACE:${QGrypho_SOURCE_DIR}/src>)
-target_link_libraries(QGrypho PRIVATE Qt${QT_VERSION_MAJOR}::Widgets grypho)
-
-target_compile_definitions(QGrypho PRIVATE QGRYPHO_LIBRARY)
+target_link_libraries(QGrypho PUBLIC grypho PRIVATE Qt${QT_VERSION_MAJOR}::Widgets nodesoup)
 
 set_target_properties(QGrypho PROPERTIES
     POSITION_INDEPENDENT_CODE ON
-    PUBLIC_HEADER ${QGrypho_SOURCE_DIR}/QGrypho.h)
+    PUBLIC_HEADER ${QGrypho_SOURCE_DIR}/include/QGrypho.hpp)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   target_compile_options(QGrypho PRIVATE -Wall -Wextra)

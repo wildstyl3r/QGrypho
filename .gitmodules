@@ -1,3 +1,6 @@
 [submodule "grypho"]
 	path = grypho
 	url = ../grypho/
+[submodule "nodesoup"]
+	path = nodesoup
+	url = git://github.com/olvb/nodesoup

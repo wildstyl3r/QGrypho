@@ -23,8 +23,11 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(grypho)
+add_subdirectory(nodesoup)
 
 if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR QGrypho_BUILD_DEMO)
    AND BUILD_DEMO)
   add_subdirectory(demo)
+else()
+  target_compile_definitions(QGrypho PRIVATE QGRYPHO_LIBRARY)
 endif()
