@@ -116,7 +116,9 @@ void QGrypho::highlight(QVector<vertex> vs)
         v.highlight(false);
     }
     for(vertex& v : vs){
-        vertices[v].highlight(true);
+        if (0 <= v && v <= vertices.size()){
+            vertices[v].highlight(true);
+        }
     }
 }
 
