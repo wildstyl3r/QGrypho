@@ -28,6 +28,7 @@ class QGRYPHO_EXPORT QGrypho : public QWidget
 public:
   QGrypho(QWidget *parent = nullptr);
   void drawGraph(Graph *G);
+  void updateColoring();
   void highlight(QVector<vertex> vs);
   void highlight(QVector<edge> es);
   void setDblClick(std::function<void(int, bool)>);
