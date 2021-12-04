@@ -45,10 +45,13 @@ void QGrypho::drawGraph(Graph *G)
     }
 
     edges.clear();
+    QSet<edge> e_xists;
     for(vertex v = 0; v < g->V().size(); ++v){
-        for(vertex u = v + 1; u < g->V().size(); ++u){
-            if (g->V()[v].count(u)){
-                edges[{v,u}] = QG::Edge(v, u);
+        for(vertex u = 0; u < g->V().size(); ++u){
+            edge e = {std::min(u,v), std::max(u,v)};
+            if (g->V()[v].count(u) && !e_xists.contains(e)){
+                edges[e] = QG::Edge(e.first, e.second);
+                e_xists.insert(e);
             }
         }
     }
