@@ -31,10 +31,12 @@ public:
   void highlight(QVector<vertex> vs);
   void highlight(QVector<edge> es);
   void setDblClick(std::function<void(int, bool)>);
+  void setSelect(std::function<void(int)>);
   ~QGrypho();
   
 private:
   int vertexAt(const QPointF &pos);
+  std::function<void(int)> onselect;
   std::function<void(int, bool)> ondblclick;
   int vertex_size = 10;
   int cached_width, cached_height;

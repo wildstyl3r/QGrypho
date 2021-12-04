@@ -168,11 +168,7 @@ void QGrypho::mousePressEvent(QMouseEvent *event){
         }
     } else if (event->button() == Qt::RightButton) {
         int index = vertexAt(event->pos());
-        if (index != -1) {
-            highlight(QVector<vertex>(1,index));
-        } else {
-            highlight(QVector<vertex>());
-        }
+        onselect(index);
         update();
     }
 }
@@ -211,4 +207,9 @@ void QGrypho::mouseDoubleClickEvent(QMouseEvent *event)
 void QGrypho::setDblClick(std::function<void (int, bool)> f)
 {
     ondblclick = f;
+}
+
+void QGrypho::setSelect(std::function<void (int)> f)
+{
+    onselect = f;
 }
