@@ -40,7 +40,7 @@ void QGrypho::drawGraph(Graph *G)
     for (size_t i = 0; i < coords.size(); ++i){
         vertices.push_back(QG::Vertex(
                                QPointF(coords[i].x, coords[i].y),
-                               QColor::fromHsl(color_delta * g->color(i), 255, 127),
+                               makeColor(i),
                                QString::fromStdString(g->id(i) + " (" + std::to_string(g->color(i)) + (g->label(i) != "" ? ") " + g->label(i) : ")"))));
     }
 
@@ -49,7 +49,7 @@ void QGrypho::drawGraph(Graph *G)
     for(vertex v = 0; v < g->V().size(); ++v){
         for(vertex u = 0; u < g->V().size(); ++u){
             edge e = {std::min(u,v), std::max(u,v)};
-            if (g->V()[v].count(u) && !e_xists.contains(e)){
+            if (g->has({v, u}) && !e_xists.contains(e)){
                 edges[e] = QG::Edge(e.first, e.second);
                 e_xists.insert(e);
             }
@@ -60,11 +60,19 @@ void QGrypho::drawGraph(Graph *G)
   update();
 }
 
+QColor QGrypho::makeColor(vertex v) {
+    if (g->has(v)){
+        int total_colors = g->count_colors();
+        return QColor::fromHsl(360 / total_colors * g->color(v), 255 / (g->color(v) / 20 + 1), 127);
+    }
+    return Qt::black;
+}
+
 void QGrypho::updateColoring()
 {
     int color_delta = 360 / g->count_colors();
     for (size_t i = 0; i < vertices.size(); ++i){
-        vertices[i].setColor(QColor::fromHsl(color_delta * g->color(i), 255, 127));
+        vertices[i].setColor(makeColor(i));
     }
     update();
 }

@@ -39,6 +39,7 @@ public:
   
 private:
   int vertexAt(const QPointF &pos);
+  QColor makeColor(vertex v);
   std::function<void(int)> onselect;
   std::function<void(int, bool)> ondblclick;
   int vertex_size = 10;
