@@ -128,7 +128,7 @@ void QGrypho::highlight(QVector<edge> es)
         e.highlight(false);
     }
     for(edge& e : es){
-        if (es.contains({std::min(e.first, e.second), std::max(e.first, e.second)})){
+        if (edges.contains({std::min(e.first, e.second), std::max(e.first, e.second)})){
             edges[{std::min(e.first, e.second), std::max(e.first, e.second)}].highlight(true);
         }
     }
