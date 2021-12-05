@@ -220,3 +220,19 @@ void QGrypho::setSelect(std::function<void (int)> f)
 {
     onselect = f;
 }
+
+bool QGrypho::highlighted(vertex v)
+{
+    if(0 <= v && v < vertices.size()){
+        return vertices[v].highlighted();
+    }
+    return false;
+}
+
+bool QGrypho::highlighted(edge e)
+{
+    if(edges.contains({std::min(e.first, e.second), std::max(e.first, e.second)})){
+        return  edges[e].highlighted();
+    }
+    return false;
+}

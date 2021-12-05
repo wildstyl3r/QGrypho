@@ -31,6 +31,8 @@ public:
   void updateColoring();
   void highlight(QVector<vertex> vs);
   void highlight(QVector<edge> es);
+  bool highlighted(vertex vs);
+  bool highlighted(edge es);
   void setDblClick(std::function<void(int, bool)>);
   void setSelect(std::function<void(int)>);
   ~QGrypho();
