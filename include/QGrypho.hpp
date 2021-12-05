@@ -11,6 +11,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPainterPath>
+#include <QStaticText>
 #include <QToolTip>
 #include <functional>
 #include "QGVertex.hpp"
@@ -29,6 +30,7 @@ public:
   QGrypho(QWidget *parent = nullptr);
   void drawGraph(Graph *G);
   void updateColoring();
+  QString info();
   void highlight(QVector<vertex> vs);
   void highlight(QVector<edge> es);
   bool highlighted(vertex vs);
@@ -38,6 +40,7 @@ public:
   ~QGrypho();
   
 private:
+  QString _info;
   int vertexAt(const QPointF &pos);
   QColor makeColor(vertex v);
   std::function<void(int)> onselect;

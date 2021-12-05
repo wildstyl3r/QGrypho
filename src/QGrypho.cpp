@@ -36,7 +36,8 @@ void QGrypho::drawGraph(Graph *G)
     vertices.clear();
     vertices.reserve(coords.size());
 
-    int color_delta = 360 / g->count_colors();
+    int total_colors = g->count_colors();
+    int color_delta = 360 / total_colors;
     for (size_t i = 0; i < coords.size(); ++i){
         vertices.push_back(QG::Vertex(
                                QPointF(coords[i].x, coords[i].y),
@@ -55,6 +56,9 @@ void QGrypho::drawGraph(Graph *G)
             }
         }
     }
+    _info = QString::number(vertices.size()) + " vertice" + (vertices.size() > 1 ? "s" : "") + "\n" +
+            QString::number(edges.size()) + " edge" + (edges.size() > 1 ? "s" : "") + "\n" +
+            QString::number(total_colors) + " color"  + (total_colors > 1 ? "s" : "");
 
 
   update();
@@ -80,6 +84,7 @@ void QGrypho::updateColoring()
 void QGrypho::paintEvent(QPaintEvent *)
 {
   QPainter canvas(this);
+  canvas.drawText(QRectF(10, 10, width(), height()), Qt::AlignLeft, _info);
   canvas.setRenderHint(QPainter::Antialiasing);
   if(g != nullptr){
       int current_height = height();
