@@ -11,7 +11,7 @@ public:
     Vertex(QPointF pos, QColor c, QString t = "", bool h = false);
 
     static const int defaultRadius = 10;
-    static const int highlightedRadius = 30;
+    static const int highlightedRadius = 50;
 
     void setPath(const QPainterPath &path);
     void setToolTip(const QString &toolTip);
