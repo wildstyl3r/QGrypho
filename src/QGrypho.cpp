@@ -41,7 +41,7 @@ void QGrypho::drawGraph(Graph *G)
         vertices.push_back(QG::Vertex(
                                QPointF(coords[i].x, coords[i].y),
                                QColor::fromHsl(color_delta * g->color(i), 255, 127),
-                               QString::fromStdString(g->id(i) + (g->label(i) != "" ? ' ' + g->label(i) : ""))));
+                               QString::fromStdString(g->id(i) + " (" + std::to_string(g->color(i)) + (g->label(i) != "" ? ") " + g->label(i) : ")"))));
     }
 
     edges.clear();
