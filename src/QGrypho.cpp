@@ -56,9 +56,9 @@ void QGrypho::drawGraph(Graph *G)
             }
         }
     }
-    _info = QString::number(vertices.size()) + " vertice" + (vertices.size() > 1 ? "s" : "") + "\n" +
-            QString::number(edges.size()) + " edge" + (edges.size() > 1 ? "s" : "") + "\n" +
-            QString::number(total_colors) + " color"  + (total_colors > 1 ? "s" : "");
+    _info = "вершин: " + QString::number(vertices.size()) + "\n" +
+            "ребёр: " + QString::number(edges.size()) + "\n" +
+            "цветов: " + QString::number(total_colors);
 
 
   update();
