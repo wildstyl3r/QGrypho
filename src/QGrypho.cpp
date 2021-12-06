@@ -249,3 +249,7 @@ bool QGrypho::highlighted(edge e)
     }
     return false;
 }
+
+bool QGrypho::isGraphSet(){
+    return g != nullptr;
+}

@@ -28,6 +28,7 @@ class QGRYPHO_EXPORT QGrypho : public QWidget
   Q_OBJECT
 public:
   QGrypho(QWidget *parent = nullptr);
+  bool isGraphSet();
   void drawGraph(Graph *G);
   void updateColoring();
   QString info();
