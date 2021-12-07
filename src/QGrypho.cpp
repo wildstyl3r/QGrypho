@@ -91,6 +91,7 @@ void QGrypho::paintEvent(QPaintEvent *)
       int current_width = width();
 
       canvas.translate(current_width / 2, current_height / 2);
+      canvas.translate(canvas_center);
 
       double scale_factor = std::min((double)current_width / cached_width, (double)current_height / cached_height);
 
@@ -119,7 +120,8 @@ void QGrypho::paintEvent(QPaintEvent *)
 
           canvas.translate(-current);
         }
-      canvas.translate(-cached_width/2, -cached_height/2);
+      //canvas.translate(-canvas_center);
+      //canvas.translate(-cached_width/2, -cached_height/2);
     }
 }
 
@@ -172,7 +174,7 @@ int QGrypho::vertexAt(const QPointF &pos)
 
     for (int i = vertices.size() - 1; i >= 0; --i) {
         const QG::Vertex &v = vertices[i];
-        if (v.path().contains(pos - QPointF(current_width/2, current_height/2) - v.position() * scale_factor))
+        if (v.path().contains(pos - canvas_center - QPointF(current_width/2, current_height/2) - v.position() * scale_factor))
             return i;
     }
     return -1;
@@ -183,9 +185,9 @@ void QGrypho::mousePressEvent(QMouseEvent *event){
         int index = vertexAt(event->pos());
         if (index != -1) {
             moving = index;
-            prev_pos = event->pos();
-            update();
         }
+        prev_pos = event->pos();
+        update();
     } else if (event->button() == Qt::RightButton) {
         int index = vertexAt(event->pos());
         if (onselect) onselect(index);
@@ -195,8 +197,13 @@ void QGrypho::mousePressEvent(QMouseEvent *event){
 
 void QGrypho::mouseMoveEvent(QMouseEvent *event)
 {
-    if ((event->buttons() & Qt::LeftButton) && moving != -1)
-        moveVertexTo(event->pos());
+    if (event->buttons() & Qt::LeftButton){
+        if(moving != -1){
+            moveVertexTo(event->pos());
+        } else {
+            moveCanvasTo(event->pos());
+        }
+    }
 }
 
 void QGrypho::moveVertexTo(const QPointF &pos)
@@ -207,6 +214,14 @@ void QGrypho::moveVertexTo(const QPointF &pos)
 
     QPointF offset = pos - prev_pos;
     vertices[moving].setPosition(vertices[moving].position() + offset/scale_factor);
+    prev_pos = pos;
+    update();
+}
+
+void QGrypho::moveCanvasTo(const QPointF &pos)
+{
+    QPointF offset = pos - prev_pos;
+    canvas_center += offset;
     prev_pos = pos;
     update();
 }

@@ -55,12 +55,14 @@ private:
   QMap<edge, QG::Edge> edges;
   vertex moving = -1;
   QPointF prev_pos;
+  QPointF canvas_center;
 
   Graph      *g;
   Ui::QGrypho *ui;
 
 
   void moveVertexTo(const QPointF &pos);
+  void moveCanvasTo(const QPointF &pos);
 
 protected:
   bool event(QEvent *event) override;
