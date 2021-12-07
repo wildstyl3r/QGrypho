@@ -84,7 +84,6 @@ void QGrypho::updateColoring()
 void QGrypho::paintEvent(QPaintEvent *)
 {
   QPainter canvas(this);
-  canvas.drawText(QRectF(10, 10, width(), height()), Qt::AlignLeft, _info+"\n"+text);
   canvas.setRenderHint(QPainter::Antialiasing);
   if(g != nullptr){
       int current_height = height();
@@ -120,8 +119,10 @@ void QGrypho::paintEvent(QPaintEvent *)
 
           canvas.translate(-current);
         }
-      //canvas.translate(-canvas_center);
-      //canvas.translate(-cached_width/2, -cached_height/2);
+      canvas.translate(-canvas_center);
+      canvas.translate(-current_width/2, -current_height/2);
+      canvas.setPen(Qt::white);
+      canvas.drawText(QRectF(10, 10, width(), height()), Qt::AlignLeft, _info+"\n"+text);
     }
 }
 
