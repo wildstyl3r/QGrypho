@@ -37,8 +37,8 @@ public:
   void highlight(QVector<edge> es);
   bool highlighted(vertex vs);
   bool highlighted(edge es);
-  void setDblClick(std::function<void(int, bool)>);
-  void setSelect(std::function<void(int)>);
+  void setDblClick(std::function<void(Graph*, int, bool)>);
+  void setSelect(std::function<void(Graph*, int)>);
   QString text;
   ~QGrypho();
   
@@ -46,8 +46,8 @@ private:
   QString _info;
   int vertexAt(const QPointF &pos);
   QColor makeColor(vertex v);
-  std::function<void(int)> onselect;
-  std::function<void(int, bool)> ondblclick;
+  std::function<void(Graph*, int)> onselect;
+  std::function<void(Graph*, int, bool)> ondblclick;
   int vertex_size = 10;
   int cached_width, cached_height;
   vector<std::pair<double, double>> coords_cache;

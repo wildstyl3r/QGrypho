@@ -191,7 +191,7 @@ void QGrypho::mousePressEvent(QMouseEvent *event){
         update();
     } else if (event->button() == Qt::RightButton) {
         int index = vertexAt(event->pos());
-        if (onselect) onselect(index);
+        if (onselect) onselect(g, index);
         update();
     }
 }
@@ -237,15 +237,15 @@ void QGrypho::mouseReleaseEvent(QMouseEvent *event)
 
 void QGrypho::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if (ondblclick) ondblclick(vertexAt(event->pos()), event->button() == Qt::LeftButton);
+    if (ondblclick) ondblclick(g, vertexAt(event->pos()), event->button() == Qt::LeftButton);
 }
 
-void QGrypho::setDblClick(std::function<void (int, bool)> f)
+void QGrypho::setDblClick(std::function<void (Graph*, int, bool)> f)
 {
     ondblclick = f;
 }
 
-void QGrypho::setSelect(std::function<void (int)> f)
+void QGrypho::setSelect(std::function<void (Graph*, int)> f)
 {
     onselect = f;
 }
