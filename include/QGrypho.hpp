@@ -12,6 +12,7 @@
 #include <QPaintEvent>
 #include <QPainterPath>
 #include <QStaticText>
+#include <QTextDocument>
 #include <QToolTip>
 #include <functional>
 #include "QGVertex.hpp"
@@ -38,6 +39,7 @@ public:
   bool highlighted(edge es);
   void setDblClick(std::function<void(int, bool)>);
   void setSelect(std::function<void(int)>);
+  QString text;
   ~QGrypho();
   
 private:

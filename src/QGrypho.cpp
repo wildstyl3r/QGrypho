@@ -84,7 +84,7 @@ void QGrypho::updateColoring()
 void QGrypho::paintEvent(QPaintEvent *)
 {
   QPainter canvas(this);
-  canvas.drawText(QRectF(10, 10, width(), height()), Qt::AlignLeft, _info);
+  canvas.drawText(QRectF(10, 10, width(), height()), Qt::AlignLeft, _info+"\n"+text);
   canvas.setRenderHint(QPainter::Antialiasing);
   if(g != nullptr){
       int current_height = height();
