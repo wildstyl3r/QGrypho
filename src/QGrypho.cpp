@@ -237,7 +237,12 @@ void QGrypho::mouseReleaseEvent(QMouseEvent *event)
 
 void QGrypho::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if (ondblclick) ondblclick(g, vertexAt(event->pos()), event->button() == Qt::LeftButton);
+    vertex target = vertexAt(event->pos());
+    if (target == -1){
+        canvas_center = QPointF();
+    } else {
+        if (ondblclick) ondblclick(g, target, event->button() == Qt::LeftButton);
+    }
 }
 
 void QGrypho::setDblClick(std::function<void (Graph*, int, bool)> f)
