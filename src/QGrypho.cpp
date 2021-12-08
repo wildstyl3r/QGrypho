@@ -269,3 +269,11 @@ bool QGrypho::highlighted(edge e)
 bool QGrypho::isGraphSet(){
     return g != nullptr;
 }
+
+void QGrypho::select(Graph * g, int v){
+    if (onselect) onselect(g, v);
+}
+
+void QGrypho::dblClick(Graph *g, int v, bool left){
+    if (ondblclick) ondblclick(g, v, left);
+}

@@ -39,6 +39,8 @@ public:
   bool highlighted(edge es);
   void setDblClick(std::function<void(Graph*, int, bool)>);
   void setSelect(std::function<void(Graph*, int)>);
+  void dblClick(Graph* g, int v, bool left);
+  void select(Graph* g, int v);
   QString text;
   ~QGrypho();
   
