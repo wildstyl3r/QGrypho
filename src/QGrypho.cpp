@@ -28,7 +28,7 @@ void QGrypho::drawGraph(Graph *G)
 
     nodesoup::adj_list_t g_v(g->V().size());
     for (vertex v = 0; v < g->V().size(); ++v){
-        for (vertex u : g->V()[v]){
+        for (vertex u : g->V(v)){
             g_v[v].push_back(u);
         }
     }
