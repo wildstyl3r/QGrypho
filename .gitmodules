@@ -1,6 +1,6 @@
 [submodule "grypho"]
 	path = grypho
-	url = ../grypho/
+	url = git://github.com/wildstyl3r/grypho
 [submodule "nodesoup"]
 	path = nodesoup
 	url = git://github.com/olvb/nodesoup
