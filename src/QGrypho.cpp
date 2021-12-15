@@ -51,7 +51,7 @@ void QGrypho::drawGraph(Graph *G)
         for(vertex u = 0; u < g->V().size(); ++u){
             edge e = {std::min(u,v), std::max(u,v)};
             if (g->has({v, u}) && !e_xists.contains(e)){
-                edges[e] = QG::Edge(e.first, e.second);
+                edges[e] = QG::Edge(e.first, e.second, false, g->weight(e));
                 e_xists.insert(e);
             }
         }
@@ -102,7 +102,12 @@ void QGrypho::paintEvent(QPaintEvent *)
           } else {
               canvas.setPen(normal);
           }
-          canvas.drawLine(vertices[e.u()].position() * scale_factor, vertices[e.v()].position() * scale_factor);
+          QPointF v_scr = vertices[e.v()].position() * scale_factor;
+          QPointF u_scr = vertices[e.u()].position() * scale_factor;
+          canvas.drawLine(u_scr, v_scr);
+          if (e.weight() != 1){
+              canvas.drawText((u_scr+v_scr)/2, QString::number(e.weight()));
+          }
       }
 
       for(QG::Vertex& v : vertices){
