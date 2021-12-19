@@ -67,7 +67,7 @@ void QGrypho::drawGraph(Graph *G)
 QColor QGrypho::makeColor(vertex v) {
     if (g->has(v)){
         int total_colors = g->count_colors();
-        return QColor::fromHsl(360 / total_colors * g->color(v), 128 + 127 / (g->color(v) % 3 + 1), 80 + 95 / (3 - g->color(v) % 3));
+        return QColor::fromHsl((360 / total_colors * g->color(v)) % 360, (128 + 127 / (g->color(v) % 3 + 1)) % 256, (80 + 95 / (3 - g->color(v) % 3)) % 256);
     }
     return Qt::black;
 }
