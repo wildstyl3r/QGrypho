@@ -20,15 +20,16 @@ QGrypho::~QGrypho()
   delete ui;
 }
 
-void QGrypho::drawGraph(Graph *G)
+void QGrypho::drawGraph(const Graph *G)
 {
     g = G;
     cached_height = height();
     cached_width = width();
 
-    nodesoup::adj_list_t g_v(g->V().size());
-    for (vertex v = 0; v < g->V().size(); ++v){
-        for (vertex u : g->V(v)){
+    nodesoup::adj_list_t g_v(g->size());
+    for (vertex v = 0; v < g->size(); ++v){
+        for (vertex u = 0; u < g->size(); ++u)
+            if (g->has({v,u})){
             g_v[v].push_back(u);
         }
     }
@@ -47,8 +48,8 @@ void QGrypho::drawGraph(Graph *G)
 
     edges.clear();
     QSet<edge> e_xists;
-    for(vertex v = 0; v < g->V().size(); ++v){
-        for(vertex u = 0; u < g->V().size(); ++u){
+    for(vertex v = 0; v < g->size(); ++v){
+        for(vertex u = 0; u < g->size(); ++u){
             edge e = {std::min(u,v), std::max(u,v)};
             if (g->has({v, u}) && !e_xists.contains(e)){
                 edges[e] = QG::Edge(e.first, e.second, false, g->weight(e));
@@ -250,12 +251,12 @@ void QGrypho::mouseDoubleClickEvent(QMouseEvent *event)
     }
 }
 
-void QGrypho::setDblClick(std::function<void (Graph*, int, bool)> f)
+void QGrypho::setDblClick(std::function<void (const Graph*, int, bool)> f)
 {
     ondblclick = f;
 }
 
-void QGrypho::setSelect(std::function<void (Graph*, int)> f)
+void QGrypho::setSelect(std::function<void (const Graph*, int)> f)
 {
     onselect = f;
 }

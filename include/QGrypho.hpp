@@ -30,15 +30,15 @@ class QGRYPHO_EXPORT QGrypho : public QWidget
 public:
   QGrypho(QWidget *parent = nullptr);
   bool isGraphSet();
-  void drawGraph(Graph *G);
+  void drawGraph(const Graph *G);
   void updateColoring();
   QString info();
   void highlight(QVector<vertex> vs);
   void highlight(QVector<edge> es);
   bool highlighted(vertex vs);
   bool highlighted(edge es);
-  void setDblClick(std::function<void(Graph*, int, bool)>);
-  void setSelect(std::function<void(Graph*, int)>);
+  void setDblClick(std::function<void(const Graph*, int, bool)>);
+  void setSelect(std::function<void(const Graph*, int)>);
   void dblClick(Graph* g, int v, bool left);
   void select(Graph* g, int v);
   QString text;
@@ -48,8 +48,8 @@ private:
   QString _info;
   int vertexAt(const QPointF &pos);
   QColor makeColor(vertex v);
-  std::function<void(Graph*, int)> onselect;
-  std::function<void(Graph*, int, bool)> ondblclick;
+  std::function<void(const Graph*, int)> onselect;
+  std::function<void(const Graph*, int, bool)> ondblclick;
   int vertex_size = 10;
   int cached_width, cached_height;
   vector<std::pair<double, double>> coords_cache;
@@ -59,7 +59,7 @@ private:
   QPointF prev_pos;
   QPointF canvas_center;
 
-  Graph      *g;
+  const Graph  *g;
   Ui::QGrypho *ui;
 
 
