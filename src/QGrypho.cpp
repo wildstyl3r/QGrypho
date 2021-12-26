@@ -11,7 +11,7 @@ QGrypho::QGrypho(QWidget *parent):
   setMouseTracking(true);
   setAutoFillBackground(true);
   QPalette pal(palette());
-  pal.setColor(QPalette::Background, QColor(23,27,33));
+  pal.setColor(QPalette::Window, QColor(23,27,33));
   setPalette(pal);
 }
 
@@ -27,29 +27,32 @@ void QGrypho::drawGraph(const Graph *G)
     cached_width = width();
 
     nodesoup::adj_list_t g_v(g->size());
-    for (vertex v = 0; v < g->size(); ++v){
-        for (vertex u = 0; u < g->size(); ++u)
+    map<vertex, size_t> num;
+    for (auto& [v, _] : g->V()){
+        size_t n = num.size();
+        num[v] = n;
+    }
+    for (auto& [v, _] : g->V()){
+        for (auto& [u, _] : g->V())
             if (g->has({v,u})){
-            g_v[v].push_back(u);
-        }
+                g_v[num[v]].push_back(num[u]);
+            }
     }
     auto coords = nodesoup::fruchterman_reingold(g_v, cached_width, cached_height);
     vertices.clear();
-    vertices.reserve(coords.size());
 
     int total_colors = g->count_colors();
-    int color_delta = 360 / total_colors;
-    for (size_t i = 0; i < coords.size(); ++i){
-        vertices.push_back(QG::Vertex(
-                               QPointF(coords[i].x, coords[i].y),
-                               makeColor(i),
-                               QString::fromStdString(g->id(i) + " (" + std::to_string(g->color(i)) + (g->label(i) != "" ? ") " + g->label(i) : ")"))));
+    for (auto& [v,_] : g->V()){
+        vertices[v] = QG::Vertex(
+                QPointF(coords[num[v]].x, coords[num[v]].y),
+                makeColor(v),
+                QString::fromStdString(v + " (" + std::to_string(g->color(v)) + (g->label(v) != "" ? ") " + g->label(v) : ")")));
     }
 
     edges.clear();
     QSet<edge> e_xists;
-    for(vertex v = 0; v < g->size(); ++v){
-        for(vertex u = 0; u < g->size(); ++u){
+    for (auto& [v, _] : g->V()){
+        for (auto& [u, _] : g->V()){
             edge e = {std::min(u,v), std::max(u,v)};
             if (g->has({v, u}) && !e_xists.contains(e)){
                 edges[e] = QG::Edge(e.first, e.second, false, g->weight(e));
@@ -75,9 +78,8 @@ QColor QGrypho::makeColor(vertex v) {
 
 void QGrypho::updateColoring()
 {
-    int color_delta = 360 / g->count_colors();
-    for (size_t i = 0; i < vertices.size(); ++i){
-        vertices[i].setColor(makeColor(i));
+    for (auto& [v, _] : g->V()){
+        vertices[v].setColor(makeColor(v));
     }
     update();
 }
@@ -138,7 +140,7 @@ void QGrypho::highlight(QVector<vertex> vs)
         v.highlight(false);
     }
     for(vertex& v : vs){
-        if (0 <= v && v <= vertices.size()){
+        if (vertices.count(v)){
             vertices[v].highlight(true);
         }
     }
@@ -160,8 +162,8 @@ bool QGrypho::event(QEvent *event)
 {
     if(event->type() == QEvent::ToolTip){
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-        int index = vertexAt(helpEvent->pos());
-        if (index != -1) {
+        vertex index = vertexAt(helpEvent->pos());
+        if (index != "") {
             QToolTip::showText(helpEvent->globalPos(), vertices[index].toolTip());
         } else {
             QToolTip::hideText();
@@ -173,31 +175,31 @@ bool QGrypho::event(QEvent *event)
     return QWidget::event(event);
 }
 
-int QGrypho::vertexAt(const QPointF &pos)
+const vertex QGrypho::vertexAt(const QPointF &pos) const
 {
     int current_height = height();
     int current_width = width();
     double scale_factor = std::min((double)current_width / cached_width, (double)current_height / cached_height);
 
-    for (int i = vertices.size() - 1; i >= 0; --i) {
-        const QG::Vertex &v = vertices[i];
-        if (v.path().contains(pos - canvas_center - QPointF(current_width/2, current_height/2) - v.position() * scale_factor))
-            return i;
+    for (vertex& k : vertices.keys()) {
+        //const QG::Vertex &v = vertices[i];
+        if (vertices[k].path().contains(pos - canvas_center - QPointF(current_width/2, current_height/2) - vertices[k].position() * scale_factor))
+            return k;
     }
-    return -1;
+    return "";
 }
 
 void QGrypho::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton) {
-        int index = vertexAt(event->pos());
-        if (index != -1) {
-            moving = index;
+        vertex v = vertexAt(event->pos());
+        if (v != "") {
+            moving = v;
         }
         prev_pos = event->pos();
         update();
     } else if (event->button() == Qt::RightButton) {
-        int index = vertexAt(event->pos());
-        if (onselect) onselect(g, index);
+        vertex v = vertexAt(event->pos());
+        if (onselect) onselect(g, v);
         update();
     }
 }
@@ -205,7 +207,7 @@ void QGrypho::mousePressEvent(QMouseEvent *event){
 void QGrypho::mouseMoveEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton){
-        if(moving != -1){
+        if(moving != ""){
             moveVertexTo(event->pos());
         } else {
             moveCanvasTo(event->pos());
@@ -235,35 +237,35 @@ void QGrypho::moveCanvasTo(const QPointF &pos)
 
 void QGrypho::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton && moving != -1) {
+    if (event->button() == Qt::LeftButton && moving != "") {
         moveVertexTo(event->pos());
-        moving = -1;
+        moving = "";
     }
 }
 
 void QGrypho::mouseDoubleClickEvent(QMouseEvent *event)
 {
     vertex target = vertexAt(event->pos());
-    if (target == -1){
+    if (target == ""){
         canvas_center = QPointF();
     } else {
         if (ondblclick) ondblclick(g, target, event->button() == Qt::LeftButton);
     }
 }
 
-void QGrypho::setDblClick(std::function<void (const Graph*, int, bool)> f)
+void QGrypho::setDblClick(std::function<void (const Graph*, vertex, bool)> f)
 {
     ondblclick = f;
 }
 
-void QGrypho::setSelect(std::function<void (const Graph*, int)> f)
+void QGrypho::setSelect(std::function<void (const Graph*, vertex)> f)
 {
     onselect = f;
 }
 
 bool QGrypho::highlighted(vertex v)
 {
-    if(0 <= v && v < vertices.size()){
+    if(vertices.count(v)){
         return vertices[v].highlighted();
     }
     return false;
@@ -281,10 +283,10 @@ bool QGrypho::isGraphSet(){
     return g != nullptr;
 }
 
-void QGrypho::select(Graph * g, int v){
+void QGrypho::select(Graph * g, vertex v){
     if (onselect) onselect(g, v);
 }
 
-void QGrypho::dblClick(Graph *g, int v, bool left){
+void QGrypho::dblClick(Graph *g, vertex v, bool left){
     if (ondblclick) ondblclick(g, v, left);
 }

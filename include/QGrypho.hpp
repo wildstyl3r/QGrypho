@@ -17,11 +17,18 @@
 #include <functional>
 #include "QGVertex.hpp"
 #include "QGEdge.hpp"
-#include "grypho.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class QGrypho; }
 QT_END_NAMESPACE
+
+namespace std
+{
+  inline auto qHash(const std::string& key, uint seed = 0)
+  {
+    return qHash(QByteArray::fromRawData(key.data(), key.length()), seed);
+  }
+}
 
 
 class QGRYPHO_EXPORT QGrypho : public QWidget
@@ -37,25 +44,25 @@ public:
   void highlight(QVector<edge> es);
   bool highlighted(vertex vs);
   bool highlighted(edge es);
-  void setDblClick(std::function<void(const Graph*, int, bool)>);
-  void setSelect(std::function<void(const Graph*, int)>);
-  void dblClick(Graph* g, int v, bool left);
-  void select(Graph* g, int v);
+  void setDblClick(std::function<void(const Graph*, vertex, bool)>);
+  void setSelect(std::function<void(const Graph*, vertex)>);
+  void dblClick(Graph* g, vertex v, bool left);
+  void select(Graph* g, vertex v);
   QString text;
   ~QGrypho();
   
 private:
   QString _info;
-  int vertexAt(const QPointF &pos);
+  const vertex vertexAt(const QPointF &pos) const;
   QColor makeColor(vertex v);
-  std::function<void(const Graph*, int)> onselect;
-  std::function<void(const Graph*, int, bool)> ondblclick;
+  std::function<void(const Graph*, vertex)> onselect;
+  std::function<void(const Graph*, vertex, bool)> ondblclick;
   int vertex_size = 10;
   int cached_width, cached_height;
   vector<std::pair<double, double>> coords_cache;
-  QVector<QG::Vertex> vertices;
+  QMap<vertex, QG::Vertex> vertices;
   QMap<edge, QG::Edge> edges;
-  vertex moving = -1;
+  vertex moving = "";
   QPointF prev_pos;
   QPointF canvas_center;
 

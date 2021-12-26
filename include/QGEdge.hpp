@@ -8,7 +8,7 @@ class Edge
 {
 public:
     Edge(const vertex v, const vertex u, bool h = false, double weight = 0) : _v(v), _u(u), _highlighted(h), _weight(weight) {}
-    Edge() : _v(0), _u(0), _highlighted(false) {}
+    Edge() : _v(""), _u(""), _highlighted(false) {}
 
     void highlight(bool h = true) { _highlighted = h; }
     void setVertices(const vertex v, const vertex u)
@@ -22,13 +22,13 @@ public:
     
     vertex v() { return _v; }
     vertex u() { return _u; }
-    vertex weight() { return _weight; }
+    double weight() { return _weight; }
     bool highlighted() { return _highlighted; }
     
 private:
     vertex _v, _u;
-    double _weight;
     bool _highlighted;
+    double _weight;
 };
 }
 

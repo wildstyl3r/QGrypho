@@ -1,6 +1,6 @@
 #ifndef QGVERTEX_H
 #define QGVERTEX_H
-
+#include <grypho.hpp>
 #include <QPainterPath>
 #include <QColor>
 
@@ -8,7 +8,7 @@ namespace QG {
 class Vertex
 {
 public:
-    Vertex(QPointF pos, QColor c, QString t = "", bool h = false);
+    Vertex(QPointF pos = QPointF(), QColor c = Qt::black, QString t = "", bool h = false);
 
     static const int defaultRadius = 10;
     static const int highlightedRadius = 50;

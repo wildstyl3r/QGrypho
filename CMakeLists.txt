@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14...3.18)
 
 project(
   QGrypho
-  VERSION 0.1
+  VERSION 0.2
   DESCRIPTION "Qt based visualizer for Grypho"
   LANGUAGES CXX)
 
